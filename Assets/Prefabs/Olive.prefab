@@ -126,4 +126,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   pullForce: 6
+  collectingArea: {fileID: 7210479835297212999, guid: 8096f72936c984e4f925e1d6b892ff31,
+    type: 3}
   collectedMaterial: {fileID: 2100000, guid: e720afbf813f3154781a0378c37958de, type: 2}

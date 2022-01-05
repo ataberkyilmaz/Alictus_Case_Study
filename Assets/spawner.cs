@@ -9,7 +9,11 @@ public class spawner : MonoBehaviour
     public int spawnAmount;
 
     [Header("Spawn Area")]
+
+    /// Point 1 is located at the bottom left of play area to determine the minimum coordinates
     public Transform point1;
+
+    /// Point 2 is located at the bottom left of play area to determine the maximum coordinates
     public Transform point2;
     void Awake()
     {
