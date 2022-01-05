@@ -62,8 +62,6 @@ public class characterMovement : MonoBehaviour
         LayerMask rayWall = LayerMask.GetMask("Ray Wall");
         /// Observe if the ray hits our "Ray Wall" object
         if (Physics.Raycast(castPoint, out hit, Mathf.Infinity, rayWall)) {
-            Debug.Log("sending ray at, " + hit.point.ToString());
-            Debug.Log("it hits a zone");
             Vector3 destination = new Vector3(hit.point.x, this.transform.position.y, hit.point.z);
 
             Vector3 velocityToAdd = destination - rb.position;
