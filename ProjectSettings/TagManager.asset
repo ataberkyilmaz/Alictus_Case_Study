@@ -12,6 +12,7 @@ TagManager:
   - hamburger
   - hotdog
   - watermelon
+  - area
   layers:
   - Default
   - TransparentFX
@@ -22,7 +23,7 @@ TagManager:
   - 
   - 
   - Ray Wall
-  - 
+  - area
   - 
   - 
   - 
