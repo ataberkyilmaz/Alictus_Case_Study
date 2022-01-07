@@ -12,8 +12,10 @@ public class characterMovement : MonoBehaviour
     private Vector3 touchPos; // Same as mouse position
 
     private bool isTouch;
+    public bool wobble;
     void Start()
     {
+        wobble = false;
         rb = GetComponent<Rigidbody>();
     }
 

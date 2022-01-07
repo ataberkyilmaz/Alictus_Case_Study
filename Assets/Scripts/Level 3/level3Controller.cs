@@ -1,5 +1,8 @@
-﻿using System.Collections;
+﻿using Newtonsoft.Json;
+using System;
+using System.Collections;
 using System.Collections.Generic;
+using System.IO;
 using UnityEngine;
 
 public class level3Controller : MonoBehaviour
@@ -11,8 +14,33 @@ public class level3Controller : MonoBehaviour
 
     [SerializeField] private GameObject selectedItem;
     [SerializeField] private int selectedId;
+
+    [SerializeField] private int pingNum;
+    public List<int> matrix;
+
+    public int foodLeft;
+
+    public List<GameObject> spawnedAreas = new List<GameObject>(30);
+
+    //myMatrix theMatrix = new myMatrix();
     void Start()
     {
+        //using (StreamReader r = new StreamReader(jsonPath))
+        //{
+        //    print("using stream reader");
+        //    string json = r.ReadToEnd();
+        //    //print("json = " + json);
+        //    //myMatrix theMatrix = JsonConvert.DeserializeObject<myMatrix>(json);
+        //    myMatrix theMatrix = JsonConvert.DeserializeObject<myMatrix>(json);
+        //    print("theMatrix" + theMatrix.name);
+        //    print("Count is " + theMatrix.matrix.Length);
+        //    for (int i = 0; i < theMatrix.matrix.Length; i++)
+        //    {
+        //        print("matrix element " + i + " is " + matrix[i]);
+        //    }
+        //}
+
+        pingNum = 0;
         pickObj = false;
     }
 
@@ -38,6 +66,9 @@ public class level3Controller : MonoBehaviour
 
         itemDrop();
     }
+
+   
+
     bool getMousePos()
     {
         if (Input.GetMouseButtonDown(0))
@@ -70,7 +101,7 @@ public class level3Controller : MonoBehaviour
         {
             selectedItem = hit.transform.gameObject.GetComponent<areaScript>().objectIn;
             selectedId = hit.transform.gameObject.GetComponent<areaScript>().id;
-            print("I picked an object which is: " + selectedItem.tag);
+
             pickObj = true;
         }
     }
@@ -86,14 +117,12 @@ public class level3Controller : MonoBehaviour
     void moveItem(Vector3 pos)
     {
         selectedItem.GetComponent<Collider>().enabled = false;
-        print("move item is working");
         Ray castPoint = Camera.main.ScreenPointToRay(pos);
         RaycastHit hit;
         LayerMask rayWall = LayerMask.GetMask("Ray Wall");
         /// Observe if the ray hits our "Ray Wall" object
         if (Physics.Raycast(castPoint, out hit, Mathf.Infinity, rayWall))
         {
-            print("trying to move item!");
             selectedItem.transform.position = hit.point;
             
         }
@@ -119,5 +148,133 @@ public class level3Controller : MonoBehaviour
                 selectedId = -1;
             }
         }
+    }
+
+    public void addArea(GameObject obj)
+    {
+        spawnedAreas.Add(obj);
+    }
+
+    public bool checkBoard()
+    {
+        bool deleted = false;
+        pingNum += 1;
+        for(int idx = 0; idx < 29; idx++)
+        {
+            if (spawnedAreas[idx].GetComponent<areaScript>().objectIn != null && pingNum % 2 == 0)
+            {
+                List<GameObject> horizontalDestroy = new List<GameObject>();
+                List<GameObject> verticalDestroy = new List<GameObject>();
+                GameObject currentObj = spawnedAreas[idx].GetComponent<areaScript>().objectIn;
+
+                //Debug.Log("checking for object " + currentObj.tag + " at index " + idx);
+                horizontalDestroy.Add(currentObj);
+                verticalDestroy.Add(currentObj);
+
+                int horizontalIdx = idx;
+                while ((horizontalIdx - 1) % 5 != 4 && horizontalIdx - 1 >= 0)
+                {
+                    if (spawnedAreas[horizontalIdx - 1].GetComponent<areaScript>().objectIn != null)
+                    {
+                        //Debug.Log("Loop 1 for game object " + currentObj.tag);
+                        horizontalIdx -= 1;
+                        if (spawnedAreas[horizontalIdx].GetComponent<areaScript>().objectIn.tag == currentObj.tag)
+                            horizontalDestroy.Add(spawnedAreas[horizontalIdx].GetComponent<areaScript>().objectIn);
+                        else
+                            horizontalIdx = -1;
+                    }
+                    else
+                    {
+                        horizontalIdx = -1;
+                    }
+                }
+                horizontalIdx = idx;
+                while ((horizontalIdx + 1) % 5 != 0 && horizontalIdx + 1 <= 29)
+                {
+                    if (spawnedAreas[horizontalIdx + 1].GetComponent<areaScript>().objectIn != null)
+                    {
+                        //Debug.Log("Loop 2 for game object " + currentObj.tag);
+                        horizontalIdx += 1;
+                        if (spawnedAreas[horizontalIdx].GetComponent<areaScript>().objectIn.tag == currentObj.tag)
+                            horizontalDestroy.Add(spawnedAreas[horizontalIdx].GetComponent<areaScript>().objectIn);
+                        else
+                            horizontalIdx = 30;
+                    }
+                    else
+                    {
+                        horizontalIdx = 30;
+                    }
+                }
+
+                int verticalIdx = idx;
+                while ((verticalIdx - 5) >= 0)
+                {
+                    if (spawnedAreas[verticalIdx - 5].GetComponent<areaScript>().objectIn != null)
+                    {
+                        //Debug.Log("Loop 3 for game object " + currentObj.tag);
+                        verticalIdx -= 5;
+                        if (spawnedAreas[verticalIdx].GetComponent<areaScript>().objectIn.tag == currentObj.tag)
+                            verticalDestroy.Add(spawnedAreas[verticalIdx].GetComponent<areaScript>().objectIn);
+                        else
+                            verticalIdx = -1;
+                    }
+                    else
+                        verticalIdx = -1;
+                }
+
+                verticalIdx = idx;
+                while ((verticalIdx + 5) <= 29)
+                {
+                    if (spawnedAreas[verticalIdx + 5].GetComponent<areaScript>().objectIn != null)
+                    {
+                        //Debug.Log("Loop 4 for game object " + currentObj.tag);
+                        verticalIdx += 5;
+                        if (spawnedAreas[verticalIdx].GetComponent<areaScript>().objectIn.tag == currentObj.tag)
+                            verticalDestroy.Add(spawnedAreas[verticalIdx].GetComponent<areaScript>().objectIn);
+                        else
+                            verticalIdx = 30;
+                    }
+                    else
+                        verticalIdx = 30;
+                }
+
+                if (verticalDestroy.Count >= 3 || horizontalDestroy.Count >= 3)
+                {
+                    //print("VerticalDestroy count is " + verticalDestroy.Count);
+                    //print("HorizontalDestroy count is " + horizontalDestroy.Count);
+
+                    for (int i = 0; i < verticalDestroy.Count; i++)
+                    {
+                        //print("For vertical " + verticalDestroy[i].GetComponent<fruitScript3>().fruitCellId + "location, obj - " + verticalDestroy[i].tag);
+                    }
+                    for (int i = 0; i < horizontalDestroy.Count; i++)
+                    {
+                        //print("For horizontal " + horizontalDestroy[i].GetComponent<fruitScript3>().fruitCellId + "location, obj - " + horizontalDestroy[i].tag);
+                    }
+                    if (verticalDestroy.Count >= horizontalDestroy.Count)
+                    {
+                        for (int i = 0; i < verticalDestroy.Count; i++)
+                        {
+                            //Debug.Log("Vertical destroy for game object " + currentObj.tag);
+                            Destroy(spawnedAreas[verticalDestroy[i].GetComponent<fruitScript3>().fruitCellId].GetComponent<areaScript>().objectIn);
+                            spawnedAreas[verticalDestroy[i].GetComponent<fruitScript3>().fruitCellId].GetComponent<areaScript>().objectIn = null;
+                            foodLeft -= 1;
+                        }
+                    }
+                    else
+                    {
+                        for (int i = 0; i < horizontalDestroy.Count; i++)
+                        {
+                            //Debug.Log("Horizontal destroy for game object " + currentObj.tag);
+                            Destroy(spawnedAreas[horizontalDestroy[i].GetComponent<fruitScript3>().fruitCellId].GetComponent<areaScript>().objectIn);
+                            spawnedAreas[horizontalDestroy[i].GetComponent<fruitScript3>().fruitCellId].GetComponent<areaScript>().objectIn = null;
+                            foodLeft -= 1;
+                        }
+                    }
+                    deleted = true;
+                }
+            } 
+        }
+        return deleted;
     }
 }

@@ -4,21 +4,22 @@ using UnityEngine;
 
 public class fruitScript3 : MonoBehaviour
 {
-    [SerializeField] private int fruitCellId;
+    public int fruitCellId;
     private bool firstAssign;
     private Vector3 currentPos;
-
+    private Vector3 backupPos;
+    private level3Controller levelController;
+    public bool validSwitch;
     public bool secondObj;
+
+    public int foodBefore;
     void Start()
     {
+        foodBefore = FindObjectOfType<level3Controller>().foodLeft;
         firstAssign = true;
         currentPos = transform.position;
-    }
-
-    // Update is called once per frame
-    void Update()
-    {
-        
+        backupPos = transform.position;
+        levelController = FindObjectOfType<level3Controller>();
     }
 
     bool checkIfCellNear(int id)
@@ -80,7 +81,7 @@ public class fruitScript3 : MonoBehaviour
 
     Vector3 searchAreaPos(int id)
     {
-        List<GameObject> areaList = FindObjectOfType<spawner3>().spawnedAreas;
+        List<GameObject> areaList = FindObjectOfType<level3Controller>().spawnedAreas;
 
         Vector3 thePos = new Vector3();
 
@@ -99,6 +100,7 @@ public class fruitScript3 : MonoBehaviour
     {
         if (other.tag == "area")
         {
+            
             areaScript areaScr = other.gameObject.GetComponent<areaScript>();
             if (firstAssign)
             {
@@ -115,24 +117,39 @@ public class fruitScript3 : MonoBehaviour
                     
                     if (checkIfCellNear(tempId))
                     {
-                        
-
                         // position switch
                         other.gameObject.GetComponent<areaScript>().objectIn.transform.position = currentPos;
                         other.gameObject.GetComponent<areaScript>().objectIn.GetComponent<fruitScript3>().secondObj = true;
                         transform.position = otherPos;
-
+                        currentPos = otherPos;
+                        other.gameObject.GetComponent<areaScript>().objectIn = this.gameObject;
+                        fruitCellId = areaScr.id;
                         
                     }
                     else
                     {
-                        transform.position = currentPos;
+                        transform.position = currentPos;                   
                     }
                 }
-                currentPos = otherPos;
-                other.gameObject.GetComponent<areaScript>().objectIn = this.gameObject;
-                fruitCellId = areaScr.id;
+                else
+                {
+                    currentPos = otherPos;
+                    other.gameObject.GetComponent<areaScript>().objectIn = this.gameObject;
+                    fruitCellId = areaScr.id;
+                }
             }
+            validSwitch = levelController.checkBoard();
+            int foodAfter = FindObjectOfType<level3Controller>().foodLeft;
+            if (foodBefore > foodAfter)
+            {
+                backupPos = currentPos;
+                foodBefore = foodAfter;
+            }
+            //else 
+            //{
+            //    transform.position = backupPos;
+            //    other.gameObject.GetComponent<areaScript>().objectIn.transform.position = other.gameObject.GetComponent<areaScript>().objectIn.GetComponent<fruitScript3>().backupPos;
+            //}
             secondObj = false;
         }
     }

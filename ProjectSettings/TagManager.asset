@@ -13,6 +13,8 @@ TagManager:
   - hotdog
   - watermelon
   - area
+  - fruit
+  - dead zone
   layers:
   - Default
   - TransparentFX

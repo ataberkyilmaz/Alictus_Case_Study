@@ -699,12 +699,17 @@ PrefabInstance:
     - target: {fileID: 1102184823748938263, guid: 4baa369e995578f43b23527f1d2a86ef,
         type: 3}
       propertyPath: m_LocalScale.x
-      value: 1.93
+      value: 1.6693835
+      objectReference: {fileID: 0}
+    - target: {fileID: 1102184823748938263, guid: 4baa369e995578f43b23527f1d2a86ef,
+        type: 3}
+      propertyPath: m_LocalScale.z
+      value: 2.025902
       objectReference: {fileID: 0}
     - target: {fileID: 1102184823748938263, guid: 4baa369e995578f43b23527f1d2a86ef,
         type: 3}
       propertyPath: m_LocalPosition.x
-      value: 3.1
+      value: 2.94
       objectReference: {fileID: 0}
     - target: {fileID: 1102184823748938263, guid: 4baa369e995578f43b23527f1d2a86ef,
         type: 3}
@@ -714,12 +719,12 @@ PrefabInstance:
     - target: {fileID: 1102184823748938263, guid: 4baa369e995578f43b23527f1d2a86ef,
         type: 3}
       propertyPath: m_LocalPosition.z
-      value: 0
+      value: -0.62
       objectReference: {fileID: 0}
     - target: {fileID: 1102184823806634356, guid: 4baa369e995578f43b23527f1d2a86ef,
         type: 3}
       propertyPath: m_IsActive
-      value: 0
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 4080205543053158470, guid: 4baa369e995578f43b23527f1d2a86ef,
         type: 3}
@@ -1595,6 +1600,8 @@ MonoBehaviour:
   area1: {fileID: 306408727}
   area2: {fileID: 856388619}
   area3: {fileID: 219120428}
+  levelController: {fileID: 0}
+  matrix: 
 --- !u!1 &1763513098
 GameObject:
   m_ObjectHideFlags: 0
@@ -1812,6 +1819,11 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   pickObj: 0
   selectedItem: {fileID: 0}
+  selectedId: 0
+  pingNum: 0
+  matrix: 000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000
+  foodLeft: 30
+  spawnedAreas: []
 --- !u!4 &1943121554
 Transform:
   m_ObjectHideFlags: 0
