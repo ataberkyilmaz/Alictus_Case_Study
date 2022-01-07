@@ -65,6 +65,11 @@ public class level3Controller : MonoBehaviour
 
 
         itemDrop();
+
+        if(foodLeft == 0)
+        {
+            print("Level 3 is completed!");
+        }
     }
 
    
