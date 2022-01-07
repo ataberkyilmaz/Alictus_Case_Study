@@ -1,7 +1,7 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-
+using UnityEngine.SceneManagement;
 public class level1Controller : MonoBehaviour
 {
     [SerializeField] private int collectedOlive;
@@ -29,6 +29,12 @@ public class level1Controller : MonoBehaviour
         {
             levelEnd = true;
             Debug.Log("Level has ended!");
+            Invoke("loadLevel2", 1f);
         }
+    }
+
+    void loadLevel2()
+    {
+        SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex + 1);
     }
 }

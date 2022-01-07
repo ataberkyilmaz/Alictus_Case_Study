@@ -15,6 +15,7 @@ TagManager:
   - area
   - fruit
   - dead zone
+  - deadZone
   layers:
   - Default
   - TransparentFX

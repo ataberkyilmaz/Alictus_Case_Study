@@ -37,8 +37,9 @@ public class oliveCollision : MonoBehaviour
     }
     private void OnCollisionEnter(Collision collision)
     {
-        if(collision.gameObject.tag == "dead zone")
+        if(collision.gameObject.tag == "deadZone")
         {
+            print("resetting level");
             SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex);
         }
         else

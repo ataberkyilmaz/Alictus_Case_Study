@@ -1,6 +1,7 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 
 public class level4Controller : MonoBehaviour
 {
@@ -16,6 +17,11 @@ public class level4Controller : MonoBehaviour
         if(totalBlocks == 0)
         {
             print("Level 4 complete");
+            Invoke("loadLevel1", 1f);
         }
+    }
+    void loadLevel1()
+    {
+        SceneManager.LoadScene(0);
     }
 }

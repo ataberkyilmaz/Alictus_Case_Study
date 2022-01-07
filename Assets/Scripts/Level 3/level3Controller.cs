@@ -4,6 +4,7 @@ using System.Collections;
 using System.Collections.Generic;
 using System.IO;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 
 public class level3Controller : MonoBehaviour
 {
@@ -69,10 +70,14 @@ public class level3Controller : MonoBehaviour
         if(foodLeft == 0)
         {
             print("Level 3 is completed!");
+            Invoke("loadLevel4", 1f);
         }
     }
+    void loadLevel4()
+    {
+        SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex + 1);
+    }
 
-   
 
     bool getMousePos()
     {

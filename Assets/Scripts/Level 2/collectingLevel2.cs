@@ -1,6 +1,7 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 
 public class collectingLevel2 : MonoBehaviour
 {
@@ -21,8 +22,10 @@ public class collectingLevel2 : MonoBehaviour
         }
     }
 
+    
     private void OnCollisionEnter(Collision collision)
     {
+        string tag = this.tag;
         if(collision.collider.tag == this.tag && !collected)
         {
             /// to prevent collisions that are not wanted
@@ -32,9 +35,10 @@ public class collectingLevel2 : MonoBehaviour
             level2Controller.totalCollected += 1;
 
             /// to prevent from two new objects spawning
-            if(level2Controller.totalCollected % 2 == 0)
+            if (level2Controller.totalCollected % 2 == 0)
             {
                 spawner2.combineTwo(index, transform.position);
+                
             }
 
             /// destroy current objects
